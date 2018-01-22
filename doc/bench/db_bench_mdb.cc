@@ -743,7 +743,8 @@ class Benchmark {
     Env::Default()->GetTestDirectory(&test_dir);
     snprintf(file_name, sizeof(file_name),
              "%s/dbbench_mdb-%d",
-             test_dir.c_str(),
+//             test_dir.c_str(),
+             FLAGS_db,
              db_num_);
 
 	sprintf(cmd, "mkdir -p %s", file_name);
@@ -771,6 +772,7 @@ class Benchmark {
 	rc = mdb_env_set_mapsize(db_, msize);
 	rc = mdb_env_set_maxreaders(db_, FLAGS_threads + 2);
 	rc = mdb_env_open(db_, file_name, env_opt, 0664);
+	  printf("DB %s, flag 0x%x, msize %lu\n", file_name, env_opt, msize);
 	if (rc) {
       fprintf(stderr, "open error: %s\n", mdb_strerror(rc));
     }

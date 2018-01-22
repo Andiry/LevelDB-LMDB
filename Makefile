@@ -6,7 +6,7 @@
 # Uncomment exactly one of the lines labelled (A), (B), and (C) below
 # to switch between compilation modes.
 
-OPT ?= -O2 -DNDEBUG       # (A) Production use (optimized mode)
+OPT ?= -O2 -DNDEBUG -std=c++11       # (A) Production use (optimized mode)
 # OPT ?= -g2              # (B) Debug mode, w/ full line-level debugging symbols
 # OPT ?= -O2 -g2 -DNDEBUG # (C) Profiling mode: opt, but w/debugging symbols
 #-----------------------------------------------
@@ -150,16 +150,16 @@ db_bench_sqlm: doc/bench/db_bench_sqlo.o $(LIBRARY) $(TESTUTIL)
 	$(CXX) doc/bench/db_bench_sqlo.o $(LIBRARY) $(TESTUTIL) -o $@ $(LDFLAGS) /usr/local/lib/libsqlite3lmdb.a -ldl
 
 db_bench_tree_db: doc/bench/db_bench_tree_db.o $(LIBRARY) $(TESTUTIL)
-	$(CXX) doc/bench/db_bench_tree_db.o $(LIBRARY) $(TESTUTIL) -o $@ $(LDFLAGS) /usr/local/lib/libkyotocabinet.a
+	$(CXX) doc/bench/db_bench_tree_db.o $(LIBRARY) $(TESTUTIL) -o $@ $(LDFLAGS) /usr/lib/x86_64-linux-gnu/libkyotocabinet.a /usr/lib/x86_64-linux-gnu/libz.so /usr/lib/x86_64-linux-gnu/liblzma.so /usr/lib/x86_64-linux-gnu/liblzo2.so
 
 db_bench_forestdb: doc/bench/db_bench_forestdb.o $(LIBRARY) $(TESTUTIL)
 	$(CXX) doc/bench/db_bench_forestdb.o $(LIBRARY) $(TESTUTIL) -o $@ $(LDFLAGS) /usr/local/lib/libforestdb.a
 
 db_bench_mdb: doc/bench/db_bench_mdb.o $(LIBRARY) $(TESTUTIL)
-	$(CXX) doc/bench/db_bench_mdb.o $(LIBRARY) $(TESTUTIL) -o $@ $(LDFLAGS) /usr/local/lib/liblmdb.a
+	$(CXX) doc/bench/db_bench_mdb.o $(LIBRARY) $(TESTUTIL) -o $@ $(LDFLAGS) /usr/local/lib/liblmdb.a /usr/lib/x86_64-linux-gnu/libsnappy.so
 
 db_bench_bdb: doc/bench/db_bench_bdb.o $(LIBRARY) $(TESTUTIL)
-	$(CXX) doc/bench/db_bench_bdb.o $(LIBRARY) $(TESTUTIL) -o $@ $(LDFLAGS) /usr/local/lib/libdb.a
+	$(CXX) doc/bench/db_bench_bdb.o $(LIBRARY) $(TESTUTIL) -o $@ $(LDFLAGS) /usr/lib/x86_64-linux-gnu/libdb.a
 
 db_bench_sophia: doc/bench/db_bench_sophia.o $(LIBRARY) $(TESTUTIL)
 	$(CXX) doc/bench/db_bench_sophia.o $(LIBRARY) $(TESTUTIL) -o $@ $(LDFLAGS) /usr/local/lib/libsophia.a
