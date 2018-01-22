@@ -1,0 +1,39 @@
+export TEST_TMPDIR=/mnt/ramdisk/lmdbbenc
+#export TEST_TMPDIR=/mnt/olamstore/lmdbbench
+#export TEST_TMPDIR=/mnt/olamstore-ssd/lmdbbench
+#NUM=1200000000 # about 140GB.
+#NUMS="25000000 50000000 100000000 200000000 400000000 800000000 1600000000"
+NUMS="25000000000"
+VSIZE=96
+WRATE=0
+STATS=200000000
+DUR=60
+THR="8"
+
+TIME="numactl -i all /usr/bin/time -f Usr\tSys\t%%\tWall\tRSS\tMajor\tMinor\tVolun\tInvol\tIn\tOut\n%U\t%S\t%P\t%E\t%M\t%F\t%R\t%w\t%c\t%I\t%O"
+
+ENGINES=""
+ENGINES="$ENGINES LMDB"
+LMDB_cmd="./db_bench_mdb"
+LMDB_arg="--readahead=0"
+
+
+for NUM in $NUMS; do
+    for ENG in $ENGINES; do
+	CMD="\$${ENG}_cmd"
+	CMD=`eval echo $CMD`
+	ARG="\$${ENG}_arg"
+	ARG=`eval echo $ARG`
+	echo "ENGINE=$ENG"
+	rm -rf $TEST_TMPDIR/*
+	echo 1 > /proc/fs/NOVA/pmem0/timing_stats
+	echo "==========>FILL_SEQ_TEST"
+	date +%Y/%m/%d-%H:%M:%S
+	$TIME $CMD --benchmarks=fillseqsync --stats_interval=$STATS --num=$NUM --value_size=$VSIZE $ARG
+	date +%Y/%m/%d-%H:%M:%S
+	sync
+	rm -rf $TEST_TMPDIR/*
+	echo "==========>FILL_SEQ_TEST finish"
+    done
+done
+exit
